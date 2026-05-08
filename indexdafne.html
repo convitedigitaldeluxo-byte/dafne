@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dafne 15 Anos 🌸</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: #1a0a2e; overflow-x: hidden; }
+
+  /* MUSIC BUTTON */
+  #musicBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+    background: rgba(201,169,110,0.92);
+    border: none;
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(201,169,110,0.5);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+  }
+  #musicBtn:hover { transform: scale(1.1); }
+  #musicBtn.playing { animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 4px 15px rgba(201,169,110,0.5); }
+    50% { box-shadow: 0 4px 30px rgba(201,169,110,0.95); }
+  }
+
+  /* IMAGE SECTIONS */
+  .img-section {
+    width: 100%;
+    position: relative;
+    line-height: 0;
+    display: block;
+  }
+  .img-section img {
+    width: 100%;
+    display: block;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .img-section img.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* CONFIRM OVERLAY — envelope na imagem 3
+     O ícone está centralizado, entre ~68% e ~88% da altura da imagem */
+  .confirm-overlay {
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top: 68%;
+    bottom: 12%;
+    background: transparent;
+    cursor: pointer;
+    z-index: 10;
+    text-decoration: none;
+    display: block;
+    border-radius: 12px;
+    /* descomente para depurar: */
+    /* background: rgba(255,0,0,0.3); */
+  }
+</style>
+</head>
+<body>
+
+<!-- AUDIO -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="https://archive.org/download/sylvia-salustti-raphael-rossato-vejo-enfim-a-luz-brilhar-de-enrolados-video-oficial/Sylvia%20Salustti%2C%20Raphael%20Rossato%20-%20Vejo%20Enfim%20a%20Luz%20Brilhar%20%28De%20EnroladosVi%CC%81deo%20Oficial%29.mp3" type="audio/mpeg">
+</audio>
+
+<!-- MUSIC BUTTON -->
+<button id="musicBtn" onclick="toggleMusic()" title="Tocar música">🎵</button>
+
+<!-- IMAGEM 1 -->
+<div class="img-section">
+  <img src="https://archive.org/download/3_20260508_20260508_2116/1.png" alt="Dafne 15 Anos">
+</div>
+
+<!-- IMAGEM 2 -->
+<div class="img-section">
+  <img src="https://archive.org/download/3_20260508_20260508_2116/2.png" alt="Dafne 15 Anos">
+</div>
+
+<!-- IMAGEM 3 — link transparente sobre o envelope de confirmação -->
+<div class="img-section" id="img3wrap">
+  <img src="https://archive.org/download/3_20260508_20260508_2116/3.png" alt="Dafne 15 Anos" id="img3">
+  <a href="https://wa.link/5jyvje" target="_blank" class="confirm-overlay" title="Confirmar Presença"></a>
+</div>
+
+<!-- IMAGEM 4 -->
+<div class="img-section">
+  <img src="https://archive.org/download/3_20260508_20260508_2116/4.png" alt="Dafne 15 Anos">
+</div>
+
+<!-- IMAGEM 5 — encerra o convite -->
+<div class="img-section">
+  <img src="https://archive.org/download/3_20260508_20260508_2116/5.png" alt="Dafne 15 Anos">
+</div>
+
+<script>
+  const music = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicBtn');
+  let started = false;
+
+  music.addEventListener('loadedmetadata', () => {
+    music.currentTime = 148;
+  });
+
+  function playMusic() {
+    music.currentTime = 148;
+    music.play().then(() => {
+      started = true;
+      btn.textContent = '🔊';
+      btn.classList.add('playing');
+    }).catch(() => {});
+  }
+
+  function toggleMusic() {
+    if (music.paused) {
+      music.play().then(() => {
+        started = true;
+        btn.textContent = '🔊';
+        btn.classList.add('playing');
+      });
+    } else {
+      music.pause();
+      btn.textContent = '🎵';
+      btn.classList.remove('playing');
+    }
+  }
+
+  document.addEventListener('touchstart', () => { if (!started) playMusic(); }, { once: true });
+  document.addEventListener('click', () => { if (!started) playMusic(); }, { once: true });
+  document.addEventListener('scroll', () => { if (!started) playMusic(); }, { once: true });
+
+  // SCROLL ANIMATIONS
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+
+  document.querySelectorAll('.img-section img').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
